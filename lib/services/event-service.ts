@@ -29,8 +29,38 @@ export class EventService {
     pricingStrategy?: string
   }): Promise<EventData> {
     try {
-      // Insert event
-      const eventInsert: EventInsert = {
+      // Get or create user for this email (if users table exists)
+      let userId: string | null = null
+
+      try {
+        // Try to find existing user
+        const { data: existingUser } = await (supabaseAdmin as any)
+          .from('users')
+          .select('id')
+          .eq('email', data.hostEmail)
+          .single()
+
+        if (existingUser) {
+          userId = existingUser.id
+        } else {
+          // Create new user
+          const { data: newUser, error: userError } = await (supabaseAdmin as any)
+            .from('users')
+            .insert({ email: data.hostEmail })
+            .select('id')
+            .single()
+
+          if (!userError && newUser) {
+            userId = newUser.id
+          }
+        }
+      } catch (error) {
+        console.warn('User lookup/creation failed, continuing without user_id:', error)
+        // Continue without user_id for backward compatibility
+      }
+
+      // Insert event (using any to bypass type checking for user_id until types are regenerated)
+      const eventInsert: any = {
         name: data.name,
         type: data.type,
         description: data.description,
@@ -39,6 +69,7 @@ export class EventService {
         location: data.location,
         capacity: data.capacity,
         host_email: data.hostEmail,
+        ...(userId && { user_id: userId }), // Only include user_id if it exists
         ui_config: data.uiConfig,
         pricing_strategy: data.pricingStrategy,
         status: 'published'
