@@ -47,7 +47,6 @@ export default function CreatePage() {
           hostEmail: 'demo@vibetix.com', // In production, get from auth
           tiers: eventData.eventSpec.suggestedTiers.map(tier => ({
             name: tier.name,
-            description: tier.description,
             price: tier.price,
             quantity: tier.quantity,
             features: tier.features || []
