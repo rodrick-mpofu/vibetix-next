@@ -1,15 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { eventParserService } from '@/lib/ai/event-parser'
-import { z } from 'zod'
-
-const RefineEventSchema = z.object({
-  currentEventSpec: z.any(),
-  feedback: z.string().min(1),
-  conversationHistory: z.array(z.object({
-    role: z.enum(['user', 'assistant']),
-    content: z.string()
-  })).optional()
-})
+import { RefineEventSchema } from '@/lib/utils/validators'
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,12 +20,13 @@ export default async function handler(
       })
     }
 
-    const { currentEventSpec, feedback, conversationHistory } = validation.data
+    const { currentEventSpec, feedback, conversationHistory, userId } = validation.data
 
     const result = await eventParserService.refineEvent(
       currentEventSpec,
       feedback,
-      conversationHistory
+      conversationHistory,
+      userId
     )
 
     return res.status(200).json(result)

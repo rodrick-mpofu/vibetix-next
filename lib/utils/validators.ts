@@ -5,7 +5,8 @@ export const EventDescriptionSchema = z.object({
   conversationHistory: z.array(z.object({
     role: z.enum(['user', 'assistant']),
     content: z.string()
-  })).optional()
+  })).optional(),
+  userId: z.string().optional() // Optional for backwards compatibility
 })
 
 export const CreateEventSchema = z.object({
@@ -43,6 +44,16 @@ export const CreateEventSchema = z.object({
   pricingStrategy: z.string().optional()
 })
 
+export const RefineEventSchema = z.object({
+  currentEventSpec: z.any(), // EventParseResult - using any to avoid circular dependency
+  feedback: z.string().min(5, 'Feedback must be at least 5 characters'),
+  conversationHistory: z.array(z.object({
+    role: z.enum(['user', 'assistant']),
+    content: z.string()
+  })).optional(),
+  userId: z.string().optional() // Optional for backwards compatibility
+})
+
 export const CreateCheckoutSessionSchema = z.object({
   eventId: z.string().uuid(),
   items: z.array(z.object({
@@ -54,5 +65,6 @@ export const CreateCheckoutSessionSchema = z.object({
 })
 
 export type EventDescriptionInput = z.infer<typeof EventDescriptionSchema>
+export type RefineEventInput = z.infer<typeof RefineEventSchema>
 export type CreateEventInput = z.infer<typeof CreateEventSchema>
 export type CreateCheckoutSessionInput = z.infer<typeof CreateCheckoutSessionSchema>

@@ -20,11 +20,12 @@ export default async function handler(
       })
     }
 
-    const { description, conversationHistory } = validation.data
+    const { description, conversationHistory, userId } = validation.data
 
     const result = await eventParserService.parseEventDescription(
       description,
-      conversationHistory
+      conversationHistory,
+      userId
     )
 
     return res.status(200).json(result)

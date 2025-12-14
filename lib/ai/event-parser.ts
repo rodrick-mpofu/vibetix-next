@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import type { EventParseResult } from '@/types'
+import { trackAIGeneration } from '@/lib/ai/usage-tracking'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!
@@ -13,8 +14,13 @@ interface ConversationMessage {
 export class EventParserService {
   async parseEventDescription(
     description: string,
-    conversationHistory: ConversationMessage[] = []
+    conversationHistory: ConversationMessage[] = [],
+    userId?: string
   ): Promise<EventParseResult> {
+    // Track AI usage BEFORE making the API call to enforce limits
+    if (userId) {
+      await trackAIGeneration(userId, 'event_parse');
+    }
     const systemPrompt = `You are an expert event planning AI for VibeTix, a ticketing platform. Your job is to parse event descriptions and generate detailed event specifications with pricing tiers and UI configurations.
 
 Given a user's event description, extract or infer:
@@ -121,8 +127,13 @@ Return ONLY valid JSON in this exact format (no markdown, no extra text):
   async refineEvent(
     currentEventSpec: EventParseResult,
     userFeedback: string,
-    conversationHistory: ConversationMessage[] = []
+    conversationHistory: ConversationMessage[] = [],
+    userId?: string
   ): Promise<EventParseResult> {
+    // Track AI usage BEFORE making the API call to enforce limits
+    if (userId) {
+      await trackAIGeneration(userId, 'ui_generation');
+    }
     const systemPrompt = `You are refining an event specification based on user feedback.
 
 Current event spec:
