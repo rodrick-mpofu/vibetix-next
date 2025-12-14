@@ -2,8 +2,26 @@ import Anthropic from '@anthropic-ai/sdk'
 import type { EventParseResult } from '@/types'
 import { trackAIGeneration } from '@/lib/ai/usage-tracking'
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!
+// Lazy initialization to avoid errors during build time
+let _anthropic: Anthropic | null = null
+
+function getAnthropicClient(): Anthropic {
+  if (!_anthropic) {
+    const apiKey = process.env.ANTHROPIC_API_KEY
+    if (!apiKey) {
+      throw new Error('ANTHROPIC_API_KEY environment variable is required')
+    }
+    _anthropic = new Anthropic({ apiKey })
+  }
+  return _anthropic
+}
+
+const anthropic = new Proxy({} as Anthropic, {
+  get(target, prop) {
+    const client = getAnthropicClient()
+    const value = (client as any)[prop]
+    return typeof value === 'function' ? value.bind(client) : value
+  }
 })
 
 interface ConversationMessage {
