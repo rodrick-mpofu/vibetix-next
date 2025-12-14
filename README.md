@@ -33,10 +33,10 @@ VibeTix is a dynamic event ticketing platform where AI generates custom interfac
 
 ### 1. Clone the Repository
 
-\`\`\`bash
+```bash
 cd vibetix-next
 npm install
-\`\`\`
+```
 
 ### 2. Set Up Supabase
 
@@ -63,7 +63,7 @@ npm install
 
 Create a \`.env.local\` file:
 
-\`\`\`env
+```env
 # Anthropic AI
 ANTHROPIC_API_KEY=your_anthropic_api_key
 
@@ -79,19 +79,19 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
 # App
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-\`\`\`
+```
 
 ### 6. Run Development Server
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
 Open [http://localhost:3000](http://localhost:3000) to see VibeTix!
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 vibetix-next/
 ├── components/
 │   ├── EventChat.tsx           # Conversational event creation
@@ -131,7 +131,7 @@ vibetix-next/
 └── types/
     ├── index.ts                # TypeScript types
     └── supabase.ts             # Supabase types
-\`\`\`
+```
 
 ## 🎯 How It Works
 
@@ -177,19 +177,19 @@ Instead of WebSockets (Pusher), VibeTix uses simple polling:
 
 ### Test Event Descriptions
 
-\`\`\`
+```
 ✅ "Tech conference for 500 people with workshops"
 ✅ "Jazz concert for 200 people next Friday night"
 ✅ "Kids birthday party with magic show, 30 children"
 ✅ "Corporate team building event for 50 employees"
-\`\`\`
+```
 
 ### Stripe Test Cards
 
-\`\`\`
+```
 Success: 4242 4242 4242 4242
 Decline: 4000 0000 0000 0002
-\`\`\`
+```
 
 ## 🚢 Deployment
 

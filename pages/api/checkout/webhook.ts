@@ -51,8 +51,8 @@ export default async function handler(
       case 'payment_intent.succeeded': {
         const paymentIntent = event.data.object
         // Update order with payment intent
-        await supabaseAdmin
-          .from('orders')
+        await (supabaseAdmin
+          .from('orders') as any)
           .update({
             stripe_payment_intent_id: paymentIntent.id,
             status: 'paid'
@@ -63,8 +63,8 @@ export default async function handler(
 
       case 'payment_intent.payment_failed': {
         const paymentIntent = event.data.object
-        await supabaseAdmin
-          .from('orders')
+        await (supabaseAdmin
+          .from('orders') as any)
           .update({ status: 'failed' })
           .eq('stripe_checkout_session_id', paymentIntent.metadata.checkoutSessionId)
         break
@@ -91,13 +91,13 @@ async function handleCheckoutComplete(session: any) {
     const items = JSON.parse(session.metadata.items)
 
     // Update order status
-    await supabaseAdmin
-      .from('orders')
+    await (supabaseAdmin
+      .from('orders') as any)
       .update({
         status: 'paid',
         customer_email: session.customer_email || session.customer_details?.email,
         customer_name: session.customer_details?.name || 'Guest'
-      })
+      } as any)
       .eq('id', orderId)
 
     // Create tickets for each item
@@ -106,8 +106,8 @@ async function handleCheckoutComplete(session: any) {
         const ticketNumber = generateTicketNumber()
         const qrCode = await generateTicketQRCode(ticketNumber, eventId)
 
-        await supabaseAdmin
-          .from('tickets')
+        await (supabaseAdmin
+          .from('tickets') as any)
           .insert({
             order_id: orderId,
             event_id: eventId,

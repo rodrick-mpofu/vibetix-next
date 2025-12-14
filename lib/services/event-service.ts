@@ -46,7 +46,7 @@ export class EventService {
 
       const { data: eventData, error: eventError } = await supabaseAdmin
         .from('events')
-        .insert(eventInsert)
+        .insert(eventInsert as any)
         .select()
         .single()
 
@@ -57,7 +57,7 @@ export class EventService {
 
       // Insert ticket tiers
       const tierInserts: TierInsert[] = data.tiers.map((tier, index) => ({
-        event_id: eventData.id,
+        event_id: (eventData as any).id,
         name: tier.name,
         description: tier.description,
         price: tier.price,
@@ -69,7 +69,7 @@ export class EventService {
 
       const { data: tiersData, error: tiersError } = await supabaseAdmin
         .from('ticket_tiers')
-        .insert(tierInserts)
+        .insert(tierInserts as any)
         .select()
 
       if (tiersError) {
@@ -130,10 +130,10 @@ export class EventService {
           const { data: tiersData } = await supabaseAdmin
             .from('ticket_tiers')
             .select('*')
-            .eq('event_id', event.id)
+            .eq('event_id', (event as any).id)
             .order('sort_order', { ascending: true })
 
-          return this.mapEventRowToEventData(event, tiersData || [])
+          return this.mapEventRowToEventData(event as any, tiersData || [])
         })
       )
 
@@ -152,10 +152,10 @@ export class EventService {
         .eq('id', tierId)
         .single()
 
-      const newSold = (tier?.sold || 0) + quantity
+      const newSold = ((tier as any)?.sold || 0) + quantity
 
-      const { error } = await supabaseAdmin
-        .from('ticket_tiers')
+      const { error } = await (supabaseAdmin
+        .from('ticket_tiers') as any)
         .update({ sold: newSold })
         .eq('id', tierId)
 

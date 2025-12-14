@@ -6,9 +6,9 @@ Get VibeTix running in under 10 minutes!
 
 ### 1. Install Dependencies
 
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 ### 2. Set Up Supabase
 
@@ -44,7 +44,7 @@ npm install
 
 Create a file named \`.env.local\` in the project root:
 
-\`\`\`env
+```env
 # Anthropic
 ANTHROPIC_API_KEY=sk-ant-api03-xxx
 
@@ -60,15 +60,15 @@ SUPABASE_SERVICE_ROLE_KEY=eyJxxx
 
 # App
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-\`\`\`
+```
 
 **Important**: Replace all \`xxx\` with your actual keys!
 
 ### 5. Run the App
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
 Open [http://localhost:3000](http://localhost:3000)
 
@@ -104,7 +104,7 @@ Stripe webhooks won't work on localhost without this:
 
 ### Install Stripe CLI
 
-\`\`\`bash
+```bash
 # Windows (with Scoop)
 scoop install stripe
 
@@ -112,14 +112,14 @@ scoop install stripe
 brew install stripe/stripe-cli/stripe
 
 # Or download from https://stripe.com/docs/stripe-cli
-\`\`\`
+```
 
 ### Forward Webhooks
 
-\`\`\`bash
+```bash
 stripe login
 stripe listen --forward-to localhost:3000/api/checkout/webhook
-\`\`\`
+```
 
 Copy the webhook signing secret (starts with \`whsec_\`) and update it in your \`.env.local\`.
 
@@ -158,13 +158,13 @@ Copy the webhook signing secret (starts with \`whsec_\`) and update it in your \
 
 ## 🎨 Example Events to Try
 
-\`\`\`
+```
 "Jazz concert for 200 people next Friday at Blue Note"
 "3-day tech conference with 5 workshops, 500 attendees"
 "Kids birthday party with magic show, 30 children"
 "Yoga workshop series, 8 weeks, 20 people per session"
 "Corporate team building, 50 employees, escape room"
-\`\`\`
+```
 
 ## 💡 Pro Tips
 

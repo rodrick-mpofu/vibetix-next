@@ -77,7 +77,7 @@ export default async function handler(
         total_amount: totalAmount,
         currency: 'usd',
         status: 'pending'
-      })
+      } as any)
       .select()
       .single()
 
@@ -96,21 +96,21 @@ export default async function handler(
       cancel_url: `${appUrl}/events/${eventId}`,
       metadata: {
         eventId: event.id,
-        orderId: order.id,
+        orderId: (order as any).id,
         items: JSON.stringify(items)
       }
     })
 
     // Update order with session ID
-    await supabaseAdmin
-      .from('orders')
+    await (supabaseAdmin
+      .from('orders') as any)
       .update({ stripe_checkout_session_id: session.id })
-      .eq('id', order.id)
+      .eq('id', (order as any).id)
 
     return res.status(200).json({
       sessionId: session.id,
       url: session.url,
-      orderId: order.id
+      orderId: (order as any).id
     })
   } catch (error) {
     console.error('Error creating checkout session:', error)

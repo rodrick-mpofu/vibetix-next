@@ -52,7 +52,7 @@ export default function EventPage({ event: initialEvent, error }: EventPageProps
       <div className="min-h-screen bg-gradient-to-br from-sky-50 via-cyan-50 to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Event Not Found</h1>
-          <p className="text-slate-600 mb-4">{error || 'The event you're looking for doesn't exist.'}</p>
+          <p className="text-slate-600 mb-4">{error || "The event you're looking for doesn't exist."}</p>
           <Link
             href="/"
             className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-medium hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg"
