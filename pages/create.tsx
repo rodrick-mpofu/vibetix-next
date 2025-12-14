@@ -45,7 +45,13 @@ export default function CreatePage() {
           location: eventData.eventSpec.location,
           capacity: eventData.eventSpec.capacity,
           hostEmail: 'demo@vibetix.com', // In production, get from auth
-          tiers: eventData.eventSpec.suggestedTiers,
+          tiers: eventData.eventSpec.suggestedTiers.map(tier => ({
+            name: tier.name,
+            description: tier.description,
+            price: tier.price,
+            quantity: tier.quantity,
+            features: tier.features || []
+          })),
           uiConfig: eventData.uiConfig,
           pricingStrategy: eventData.pricingStrategy
         })
