@@ -199,8 +199,24 @@ export function createFlowgladClient(config?: FlowgladConfig): FlowgladClient {
 
 /**
  * Default Flowglad client instance
+ * Lazily initialized to avoid errors during build time
  */
-export const flowglad = createFlowgladClient();
+let _flowglad: FlowgladClient | null = null;
+
+function getFlowgladClient(): FlowgladClient {
+  if (!_flowglad) {
+    _flowglad = createFlowgladClient();
+  }
+  return _flowglad;
+}
+
+export const flowglad = new Proxy({} as FlowgladClient, {
+  get(target, prop) {
+    const client = getFlowgladClient();
+    const value = (client as any)[prop];
+    return typeof value === 'function' ? value.bind(client) : value;
+  }
+});
 
 /**
  * Export types
